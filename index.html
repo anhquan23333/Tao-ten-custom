@@ -3,34 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo SVG Tên Khách Hàng</title>
+    <title>Thiết Kế Tên 3D Khách Hàng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        input, select, button { width: 100%; margin-bottom: 15px; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        #preview { border: 2px dashed #ddd; padding: 20px; border-radius: 6px; font-size: 40px; min-height: 60px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; overflow: hidden; white-space: nowrap; }
-        button { background-color: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        button:hover { background-color: #0056b3; }
+        /* Hình nền và tổng thể */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop') center/cover no-repeat; 
+        }
+        
+        /* Hiệu ứng kính mờ cho Card */
+        .card { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            width: 90%; 
+            max-width: 420px; 
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        h2 { margin-top: 0; color: #333; font-size: 24px; margin-bottom: 25px;}
+
+        /* Ô nhập liệu và chọn font */
+        input, select { 
+            width: 100%; 
+            margin-bottom: 20px; 
+            padding: 14px; 
+            font-size: 16px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            box-sizing: border-box; 
+            background: rgba(255,255,255,0.9);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        input:focus, select:focus { border-color: #667eea; box-shadow: 0 0 8px rgba(102,126,234,0.3); }
+
+        /* Khu vực hiển thị */
+        #preview { 
+            background: rgba(255,255,255,0.6);
+            border: 2px dashed #667eea; 
+            padding: 25px; 
+            border-radius: 12px; 
+            font-size: 45px; 
+            min-height: 70px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            color: #222;
+        }
+
+        /* Nút tải về */
+        button { 
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            border: none; 
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+        }
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+        }
+        button:active { transform: translateY(0); }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Thiết Kế Tên 3D</h2>
+    <h2>✨ Thiết Kế Tên 3D</h2>
     
     <input type="text" id="nameInput" placeholder="Nhập tên của bạn..." autocomplete="off">
     
     <select id="fontSelect">
+        <option value="Montserrat">Montserrat Bold</option>
         <option value="Arial">Arial</option>
         <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Impact">Impact</option>
-        <option value="Comic Sans MS">Comic Sans MS</option>
     </select>
 
     <div id="preview">Tên Của Bạn</div>
 
-    <button id="downloadBtn">Xác Nhận & Tải File 3D (.svg)</button>
+    <button id="downloadBtn">Tải File Thiết Kế (.svg)</button>
 </div>
 
 <script>
@@ -39,17 +109,17 @@
     const preview = document.getElementById('preview');
     const downloadBtn = document.getElementById('downloadBtn');
 
-    // Cập nhật Preview khi nhập chữ hoặc đổi font
     function updatePreview() {
         const text = nameInput.value.trim() || 'Tên Của Bạn';
         preview.textContent = text;
         preview.style.fontFamily = fontSelect.value;
+        preview.style.fontWeight = fontSelect.value === 'Montserrat' ? '700' : 'normal';
     }
 
     nameInput.addEventListener('input', updatePreview);
     fontSelect.addEventListener('change', updatePreview);
+    updatePreview();
 
-    // Xử lý tạo và tải file SVG
     downloadBtn.addEventListener('click', () => {
         const text = nameInput.value.trim();
         if (!text) {
@@ -58,14 +128,13 @@
         }
 
         const font = fontSelect.value;
+        const weight = font === 'Montserrat' ? 'bold' : 'normal';
         
-        // Tạo chuỗi mã SVG chứa text
         const svgContent = `<?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300">
-    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="${font}" font-size="100" fill="black">${text}</text>
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="${font}" font-weight="${weight}" font-size="100" fill="black">${text}</text>
 </svg>`;
 
-        // Chuyển chuỗi thành file và kích hoạt tải về
         const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
